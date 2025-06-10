@@ -1,0 +1,12 @@
+
+.ruff_cache/
+.idea/
+.pytype/
+
+
+.env
+.venv
+env/
+venv/
+
+
