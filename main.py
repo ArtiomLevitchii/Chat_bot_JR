@@ -1,7 +1,7 @@
 import logging
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler,MessageHandler,filters
 from config import TELEGRAM_BOT_KEY
-from Handlers import basic, random_fact,chat_with_AI
+from Handlers import basic, random_fact,chat_with_AI,chat_with_celebrity,message_router
 
 
 #Adding basic configuration for log actions in console
@@ -21,7 +21,11 @@ def main():
 
         application.add_handler(CallbackQueryHandler(basic.menu_callback))
 
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat_with_AI.response_to_user))
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_router.message_router))
+
+        application.add_handler(CommandHandler("exit", chat_with_AI.stop_chat_mode))
+
+        application.add_handler(CommandHandler("exit_celebrity", chat_with_celebrity.exit_chat_with_celebrity))
 
         logger.info("Chat bot was successfully started")
         application.run_polling()

@@ -22,8 +22,8 @@ async def random_fact_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         reply_markup = get_main_menu_keyboard()
 
         await query.edit_message_text(
-            "<b>Welcome to ChatGPT bot</b>\n\n"
-            "Choose option from menu to continue:",
+            "🤖 <b>Welcome to ChatGPT bot</b> 🤖\n\n"
+            "🟢 Choose option from menu to continue:",
             parse_mode='HTML',
             reply_markup=reply_markup
         )
@@ -33,9 +33,9 @@ async def random_fact_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 async def send_fact(update: Update):
     try:
         if update.message:
-            loading_message = await update.message.reply_text("Generating fact, please wait...")
+            loading_message = await update.message.reply_text("🤖 Generating fact, please wait...🤖 ")
         elif update.callback_query:
-            loading_message = await update.callback_query.message.reply_text("Generating fact, please wait...")
+            loading_message = await update.callback_query.message.reply_text("🤖 Generating fact, please wait...🤖 ")
         else:
             logger.warning("Update has no message or callback_query")
             return
@@ -44,14 +44,14 @@ async def send_fact(update: Update):
         reply_markup = get_one_more_fact_keyboard()
 
         await loading_message.edit_text(
-            f"<b>Interesting fact:</b>\n\n{fact}",
+            f"🧠🧠🧠<b>Interesting fact:</b>🧠🧠🧠\n\n{fact}",
             parse_mode='HTML',
             reply_markup=reply_markup
         )
     except Exception as e:
         logger.error(f"An error occurred while generating fact - {e}")
         await loading_message.edit_text(
-            f"<b>AI services are unavailable now, please try again later</b>",
+            f"🛑🛑🛑<b>AI services are unavailable now, please try again later</b>🛑🛑🛑",
             parse_mode='HTML',
             reply_markup=reply_markup
         )
