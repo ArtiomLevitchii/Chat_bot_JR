@@ -1,7 +1,7 @@
 import logging
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler,MessageHandler,filters
 from config import TELEGRAM_BOT_KEY
-from Handlers import basic, random_fact,chat_with_AI,chat_with_celebrity,message_router,Quiz_handler
+from Handlers import basic, random_fact,chat_with_AI,chat_with_celebrity,message_router,Quiz_handler,meal_counter
 
 
 #Adding basic configuration for log actions in console
@@ -26,6 +26,8 @@ def main():
         application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^continue_quiz$"))
         application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^quiz_exit$"))
         application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^select_quiz_theme$"))
+
+        application.add_handler(CallbackQueryHandler(meal_counter.start_meal_counter, pattern="^meal_counter$"))
 
         application.add_handler(CallbackQueryHandler(basic.menu_callback))
 

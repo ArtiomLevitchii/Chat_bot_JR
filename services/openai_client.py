@@ -267,3 +267,30 @@ async def synthetize_text(text, update):
     except Exception as e:
         logger.error(f"Error occurred while text synthetizing - {e}")
         return "🛑🛑🛑Failed to synthetize text. Try later or use 🚀 /start 🛑🛑🛑"
+
+
+async def count_meal_basics(age, height, weight, gender, sports):
+    prompt = (
+        f"You must count proteins/fats/carbohydrates/calories. The person you have to calculate it for, his age is - {age}."
+        f"His height is - {height}. His weight is - {weight}. His gender is - {gender}. His sports is - {sports}, he is training 3 times a week"
+        f"You must count proteins/fats/carbohydrates/calories for 1 day meal. Response only in russian."
+    )
+
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            max_tokens=1000,
+            temperature=0.5,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        result = response.choices[0].message.content.strip()
+        return result
+    except Exception as e:
+        logger.error(f"Error occurred in meal counting method - {e}")
+        return "🛑🛑🛑Failed to translate text. Try later or use 🚀 /start 🛑🛑🛑"
