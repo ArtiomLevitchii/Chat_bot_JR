@@ -4,6 +4,7 @@ from  telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup,ReplyKe
 from telegram.ext import ContextTypes
 from helpers.keyboards import get_main_menu_keyboard,get_one_more_fact_keyboard
 from helpers.texts import get_main_text_menu
+from Handlers.Quiz_handler import start_quiz_with_user
 
 logger = logging.getLogger(__name__)
 
@@ -12,8 +13,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if update.message:
         await update.message.delete()
-
-    await update.message.reply_text("Loading...", reply_markup=ReplyKeyboardRemove())
 
     await asyncio.sleep(0.5)
 
@@ -43,13 +42,13 @@ async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["awaiting_celebrity_name"] = True
         await query.edit_message_text("🌟 <b>Enter celebrity name.</b>\n\n\n",
                                       parse_mode='HTML')
-    elif query.data == "quiz":
+    elif query.data == "start_quiz_with_user":
         await query.edit_message_text(
-            "<b>COMING SOON</b>\n\n",
+            "<b>QUIZ was selected</b>\n\n",
             parse_mode='HTML'
         )
-
-        await asyncio.sleep(3)
+        await start_quiz_with_user(update, context)
+    else:
         await start_menu_again(query)
 
 async def start_menu_again(query):

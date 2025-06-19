@@ -84,3 +84,127 @@ async def generate_celebrity_prompt(name: str) -> str:
 
     return None
 
+async def generate_quiz_themes():
+    prompt = (
+        "You need to generate themes for small quiz for user. Themes must be of medium difficulty. "
+        "Write them in a list each on a new line, without extra explanations, i'll use this list to make buttons for themes, for selection. Always response in russian"
+    )
+
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            max_tokens=300,
+            temperature=0.3,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant that creates themes for quiz, always response in russian"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        content = response.choices[0].message.content.strip()
+        return content
+    except Exception as e:
+        logger.error(f"Error occurred with themes generator service - {e}")
+        return "🛑🛑🛑Failed to generate quiz themes. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def generate_question(theme, complexity):
+    prompt = (
+        f"Generate question for this theme - {theme} with this complexity - {complexity}"
+        "Question must be only in russian"
+    )
+
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            max_tokens=900,
+            temperature=1,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are assistant that find question for quiz, always response in russian"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        content = response.choices[0].message.content.strip()
+
+        return content
+    except Exception as e:
+        logger.error(f"Error occurred with question generator service - {e}")
+        return "🛑🛑🛑Failed to generate question. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def generate_answers_for_question(question):
+    prompt = (
+        f"Generate 4 answers for this question - {question}. One of them must be correct answer. Don't specify which answer is correct."
+        "Write them in list. Must be 4 separate words or expressions. Answers must be only in russian"
+    )
+
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            max_tokens=50,
+            temperature=1,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are assistant who generates answers for question. Response only in russian"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        result = response.choices[0].message.content.strip()
+        return result
+    except Exception as e:
+        logger.error(f"Error occurred with answers generator service - {e}")
+        return "🛑🛑🛑Failed to generate quiz answers. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def verify_answer_AI(question, answer):
+
+    try:
+
+        prompt = (
+            f"You must verify if this answer - {answer} is correct to this question - {question}"
+            "If answer is correct return True, if is wrong return False"
+        )
+
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            max_tokens=20,
+            temperature=1,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are assistant, you must verify if answer is correct"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        result_raw = response.choices[0].message.content.strip().lower()
+
+        if "true" in result_raw or "да" in result_raw:
+            return True
+        elif "false" in result_raw or "нет" in result_raw:
+            return False
+        else:
+            return False
+    except Exception as e:
+        logger.error(f"Error occurred with answers verification service - {e}")
+        return "🛑🛑🛑Failed to verify quiz answers. Try later or use 🚀 /start 🛑🛑🛑"
