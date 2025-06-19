@@ -7,6 +7,7 @@ from helpers.keyboards import get_main_menu_keyboard
 from helpers.texts import get_main_text_menu
 from services.image_search import get_celebrity_image_url
 from pathlib import Path
+from helpers.texts import get_user_error_message
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +75,7 @@ async def start_chat_with_celebrity(update: Update, context: ContextTypes.DEFAUL
 
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI generated response to user - {e}🛑🛑🛑")
-        await update.message.reply_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await update.message.reply_text(get_user_error_message())
 
 async def exit_chat_with_celebrity(update: Update, context: ContextTypes.DEFAULT_TYPE):
 

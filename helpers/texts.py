@@ -11,3 +11,6 @@ def get_main_text_menu() -> str:
         "🧠 Quiz - check your knowledge(soon)\n"
         "Choose option from menu to continue:"
             )
+
+def get_user_error_message() -> str:
+    return ("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")

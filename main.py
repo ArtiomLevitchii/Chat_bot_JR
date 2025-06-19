@@ -29,7 +29,7 @@ def main():
 
         application.add_handler(CallbackQueryHandler(basic.menu_callback))
 
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_router.message_router))
+        application.add_handler(MessageHandler(filters.TEXT | filters.AUDIO | filters.VOICE, message_router.message_router))
 
         application.add_handler(CommandHandler("exit", chat_with_AI.stop_chat_mode))
 

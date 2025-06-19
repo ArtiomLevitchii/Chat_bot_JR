@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from services.openai_client import generate_quiz_themes, generate_question, generate_answers_for_question, verify_answer_AI
 from helpers.keyboards import get_buttons_for_themes,get_difficulty_buttons, get_answers_buttons, get_main_menu_keyboard, continue_quiz_exit
-from helpers.texts import get_main_text_menu
+from helpers.texts import get_main_text_menu,get_user_error_message
 
 from pathlib import Path
 
@@ -34,7 +34,7 @@ async def start_quiz_with_user(update: Update, context: ContextTypes.DEFAULT_TYP
         await query.message.edit_text(f"<b>Choose theme</b> - \n\n ", parse_mode='HTML', reply_markup=get_buttons_for_themes(quiz_themes))
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI generated response to user - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 async def generate_theme_questions(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -58,7 +58,7 @@ async def generate_theme_questions(update: Update, context: ContextTypes.DEFAULT
 
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI generated response to user - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 async def generate_question_by_difficulty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -93,7 +93,7 @@ async def generate_question_by_difficulty(update: Update, context: ContextTypes.
 
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI generated question by difficulty - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 
 async def verify_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -130,7 +130,7 @@ async def verify_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI verified answer - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 async def quiz_query_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
     try:
@@ -146,7 +146,7 @@ async def quiz_query_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
 
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred in quiz query handler - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 async def quiz_exit(update: Update, context:ContextTypes.DEFAULT_TYPE):
     try:
@@ -177,7 +177,7 @@ async def quiz_exit(update: Update, context:ContextTypes.DEFAULT_TYPE):
         )
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred in quiz exit - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())
 
 
 async def choose_new_quiz_theme(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -200,4 +200,4 @@ async def choose_new_quiz_theme(update: Update, context: ContextTypes.DEFAULT_TY
         await query.message.edit_text(f"<b>Choose theme</b> - \n\n ", parse_mode='HTML', reply_markup=get_buttons_for_themes(quiz_themes))
     except Exception as e:
         logger.error(f"🛑🛑🛑An error occurred while AI generated response to user - {e}🛑🛑🛑")
-        await query.message.edit_text("🛑🛑🛑 An error occurred - try later. Use 🚀 /start to follow main menu🛑🛑🛑")
+        await query.message.edit_text(get_user_error_message())

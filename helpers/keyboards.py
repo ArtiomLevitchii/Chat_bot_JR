@@ -9,6 +9,7 @@ def get_main_menu_keyboard():
             [InlineKeyboardButton("💬 Chat with AI", callback_data="chat_gpt")],
             [InlineKeyboardButton("🌟 Chat with celebrity", callback_data="chat_with_celebrity")],
             [InlineKeyboardButton("🧠 Quiz", callback_data="start_quiz_with_user")],
+            [InlineKeyboardButton("🌐 Audio/Voice translator", callback_data="start_translator")]
     ]
     return InlineKeyboardMarkup(buttons)
 

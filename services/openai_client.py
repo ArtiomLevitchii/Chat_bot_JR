@@ -1,7 +1,9 @@
 import logging
+import os
 
 from openai import AsyncOpenAI
 from config import CHAT_GPT_KEY
+from gtts import gTTS
 from chat_history.chat_with_user import chat_with_user
 
 logger = logging.getLogger(__name__)
@@ -208,3 +210,60 @@ async def verify_answer_AI(question, answer):
     except Exception as e:
         logger.error(f"Error occurred with answers verification service - {e}")
         return "🛑🛑🛑Failed to verify quiz answers. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def recognize_and_translate(file_path, update, context):
+    try:
+        with open(file_path,'rb') as file:
+            recognized_text_raw = await client.audio.transcriptions.create(
+                file=file,
+                model="whisper-1"
+            )
+
+        recognized_text = recognized_text_raw.text
+
+        await translate_text_in_english(recognized_text,update,context)
+
+    except Exception as e:
+        logger.error(f"Error occurred with recognizing text function - {e}")
+        return "🛑🛑🛑Failed to recognize text. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def translate_text_in_english(recognized_text,update,context):
+    prompt = (
+        f"Translate this text in English - {recognized_text}"
+    )
+
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            temperature=0.5,
+            max_tokens=4000,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        result = response.choices[0].message.content.strip()
+
+        await synthetize_text(result, update)
+
+    except Exception as e:
+        logger.error(f"Error occurred with text translation function - {e}")
+        return "🛑🛑🛑Failed to translate text. Try later or use 🚀 /start 🛑🛑🛑"
+
+async def synthetize_text(text, update):
+    try:
+        tts = gTTS(text=text, lang="en")
+        path = f"translated_{update.effective_user.id}.mp3"
+        tts.save(path)
+
+        with open(path, "rb") as audio:
+            await update.message.reply_voice(audio)
+
+        os.remove(path)
+
+    except Exception as e:
+        logger.error(f"Error occurred while text synthetizing - {e}")
+        return "🛑🛑🛑Failed to synthetize text. Try later or use 🚀 /start 🛑🛑🛑"
