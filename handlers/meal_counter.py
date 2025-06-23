@@ -1,3 +1,5 @@
+"""Модуль с обработчиками модуля по подсчёту БЖУ."""
+
 import asyncio
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -8,6 +10,8 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 async def start_meal_counter(update:Update,context:ContextTypes.DEFAULT_TYPE):
+    """Начинает общение с пользователем для сбора о нём информации"""
+
     try:
         query = update.callback_query
         await query.answer()
@@ -29,6 +33,8 @@ async def start_meal_counter(update:Update,context:ContextTypes.DEFAULT_TYPE):
 
 
 async def meal_counter_conversation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Собирает данные о пользователе и возвращает результат подсчёта БЖУ на человека в 1 день"""
+
     try:
         user_data = context.user_data
         step = user_data.get("meal_counter_step")

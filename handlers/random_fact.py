@@ -1,3 +1,5 @@
+"""Модуль для генерации рандомных фактов от AI"""
+
 import asyncio
 import logging
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
@@ -8,11 +10,14 @@ from helpers.keyboards import get_main_menu_keyboard,get_one_more_fact_keyboard
 logger = logging.getLogger(__name__)
 
 async def random_fact(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Random fact handler"""
+    """Хэндлер для команды /random — отправляет интересный факт пользователю."""
     await send_fact(update)
 
 
 async def random_fact_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Обработчик кнопок в режиме random_fact
+        """
     query = update.callback_query
     await query.answer()
 
@@ -31,6 +36,7 @@ async def random_fact_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         await send_fact(update)
 
 async def send_fact(update: Update):
+    """Начинает общение с пользователем для сбора о нём информации"""
     try:
         if update.message:
             loading_message = await update.message.reply_text("🤖 Generating fact, please wait...🤖 ")

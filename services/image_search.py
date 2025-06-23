@@ -1,3 +1,5 @@
+"""Модуль для поиска с помощью библиотеки фото в интернете"""
+
 from serpapi import GoogleSearch
 import os
 import logging
@@ -7,6 +9,7 @@ logger = logging.getLogger(__name__)
 SERP_API_KEY = os.getenv("SERP_API_KEY")
 
 async def get_celebrity_image_url(name: str) -> str:
+    """Метод ищет с помощью метода из библиотеки serpapi фото по введённому имени и возвращает его"""
     try:
         search = GoogleSearch({
             "q": name,

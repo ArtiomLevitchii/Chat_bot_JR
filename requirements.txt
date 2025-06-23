@@ -1,0 +1,5 @@
+## python-telegram-bot==20.7   - Работа с Telegram Bot API
+## python-dotenv    - Загрузка переменных из .env файла
+## openai   -    Работа с ChatGPT API
+## gTTS    -   Google Text-to-Speech (озвучка)
+## serpapi    -   	Поиск картинок и текста через SerpApi

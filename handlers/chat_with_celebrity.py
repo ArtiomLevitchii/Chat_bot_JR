@@ -1,3 +1,5 @@
+"""Модуль для общения пользователя с ботом от имени знаменитости."""
+
 import logging
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -12,10 +14,13 @@ from helpers.texts import get_user_error_message
 logger = logging.getLogger(__name__)
 
 async def start_chat_with_celebrity(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Начинает общение со звездой от его/её имени.
+        """
     try:
         user_id = update.effective_user.id
         user_text = update.message.text.strip()
-        loading_gif_path = Path("images/Loading_icon.gif")
+        loading_gif_path = Path("images/loading_icon.gif")
 
         if context.user_data.get("awaiting_celebrity_name"):
             name = user_text.title()
@@ -78,7 +83,9 @@ async def start_chat_with_celebrity(update: Update, context: ContextTypes.DEFAUL
         await update.message.reply_text(get_user_error_message())
 
 async def exit_chat_with_celebrity(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
+    """
+        Возвращает пользователя обратно в главное меню.
+        """
     user_id = update.effective_user.id
 
     context.user_data["awaiting_celebrity_name"] = False

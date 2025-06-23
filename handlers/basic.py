@@ -1,16 +1,21 @@
+"""Модуль с обработчиками стартового меню и главного интерфейса."""
+
 import asyncio
 import logging
 from  telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 from helpers.keyboards import get_main_menu_keyboard,get_one_more_fact_keyboard
 from helpers.texts import get_main_text_menu
-from Handlers.Quiz_handler import start_quiz_with_user
-from Handlers.Translator_handler import start_translator
+from handlers.quiz_handler import start_quiz_with_user
+from handlers.translator_handler import start_translator
 
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handler for start"""
+    """
+    Обработчик команды /start.
+    Удаляет стартовое сообщение, показывает главное меню.
+    """
 
     if update.message:
         await update.message.delete()
@@ -24,7 +29,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(welcome_text,parse_mode='HTML',reply_markup=reply_markup)
 
 async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handler for selection"""
+    """
+    Обрабатывает нажатие на кнопки главного меню и запускает соответствующий режим.
+    """
     query = update.callback_query
 
     await query.answer()
@@ -59,7 +66,9 @@ async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await start_menu_again(query)
 
 async def start_menu_again(query):
-    """Return back start menu"""
+    """
+    Возвращает пользователя обратно в главное меню.
+    """
 
     reply_markup = get_main_menu_keyboard()
 

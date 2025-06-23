@@ -1,3 +1,5 @@
+"""Модуль для обработки аудио и голосовых сообщений с последующим переводом с помощью AI."""
+
 import logging
 
 from telegram import Update
@@ -11,6 +13,9 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 async def start_translator(update:Update, context:ContextTypes.DEFAULT_TYPE):
+    """
+        Обрабатывает аудио/голосовое сообщение, передаёт его в OpenAI для распознавания и перевода.
+        """
     try:
         message = update.message
 
@@ -36,7 +41,7 @@ async def start_translator(update:Update, context:ContextTypes.DEFAULT_TYPE):
 
         await file.download_to_drive(file_path)
 
-        loading_gif_path = Path("images/Loading_icon.gif")
+        loading_gif_path = Path("images/loading_icon.gif")
 
         loading_message = await update.message.reply_animation(
             animation=loading_gif_path.open("rb"),

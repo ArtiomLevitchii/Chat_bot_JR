@@ -1,3 +1,5 @@
+"""Модуль взаимодействия с OpenAI API (GPT, Whisper, генерация и озвучка)."""
+
 import logging
 import os
 
@@ -10,7 +12,7 @@ logger = logging.getLogger(__name__)
 client = AsyncOpenAI(api_key=CHAT_GPT_KEY)
 
 async def get_random_fact():
-    """AI Generates random fact"""
+    """Запрашивает у AI интересный факт на русском языке."""
     try:
         responce = await client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -52,6 +54,7 @@ async def responce_to_user_message(user_message: list[dict]) -> str:
 
 
 async def generate_celebrity_prompt(name: str) -> str:
+    """AI ищет если существует такая знаменитость и возвращает ответ"""
     prompt = (
         f"Find who is this {name}. Give short description about this person, what is he/she famous about."
         "If it is famous person, response in russian. Don't make things up, if there is no information or it's not a very famous person, say - не нашлось"
@@ -87,6 +90,7 @@ async def generate_celebrity_prompt(name: str) -> str:
     return None
 
 async def generate_quiz_themes():
+    """AI генерирует темы для квиза"""
     prompt = (
         "You need to generate themes for small quiz for user. Themes must be of medium difficulty. "
         "Write them in a list each on a new line, without extra explanations, i'll use this list to make buttons for themes, for selection. Always response in russian"
@@ -116,6 +120,7 @@ async def generate_quiz_themes():
         return "🛑🛑🛑Failed to generate quiz themes. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def generate_question(theme, complexity):
+    """AI генерирует вопрос для квиза"""
     prompt = (
         f"Generate question for this theme - {theme} with this complexity - {complexity}"
         "Question must be only in russian"
@@ -146,8 +151,9 @@ async def generate_question(theme, complexity):
         return "🛑🛑🛑Failed to generate question. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def generate_answers_for_question(question):
+    """AI генерирует 4 ответа для вопроса, 1 из которых правильный - 3 другие ложные"""
     prompt = (
-        f"Generate 4 answers for this question - {question}. One of them must be correct answer. Don't specify which answer is correct."
+        f"Generate 4 answers for this question - {question}. One of them must be correct answer, and it must be in random position. Don't specify which answer is correct."
         "Write them in list. Must be 4 separate words or expressions. Answers must be only in russian"
     )
 
@@ -175,7 +181,7 @@ async def generate_answers_for_question(question):
         return "🛑🛑🛑Failed to generate quiz answers. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def verify_answer_AI(question, answer):
-
+    """AI проверяет ответ от пользователя"""
     try:
 
         prompt = (
@@ -212,6 +218,7 @@ async def verify_answer_AI(question, answer):
         return "🛑🛑🛑Failed to verify quiz answers. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def recognize_and_translate(file_path, update, context):
+    """AI распознаёт текст"""
     try:
         with open(file_path,'rb') as file:
             recognized_text_raw = await client.audio.transcriptions.create(
@@ -228,6 +235,7 @@ async def recognize_and_translate(file_path, update, context):
         return "🛑🛑🛑Failed to recognize text. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def translate_text_in_english(recognized_text,update,context):
+    """AI переводит текст на английский"""
     prompt = (
         f"Translate this text in English - {recognized_text}"
     )
@@ -254,6 +262,7 @@ async def translate_text_in_english(recognized_text,update,context):
         return "🛑🛑🛑Failed to translate text. Try later or use 🚀 /start 🛑🛑🛑"
 
 async def synthetize_text(text, update):
+    """Метод синтезирует текст в речь"""
     try:
         tts = gTTS(text=text, lang="en")
         path = f"translated_{update.effective_user.id}.mp3"
@@ -270,6 +279,7 @@ async def synthetize_text(text, update):
 
 
 async def count_meal_basics(age, height, weight, gender, sports):
+    """AI подсчитывает БЖУ на основе данных от пользователя"""
     prompt = (
         f"You must count proteins/fats/carbohydrates/calories. The person you have to calculate it for, his age is - {age}."
         f"His height is - {height}. His weight is - {weight}. His gender is - {gender}. His sports is - {sports}, he is training 3 times a week"

@@ -1,13 +1,18 @@
+"""Модуль маршрутизации входящих сообщений и передачи их в нужный режим работы бота."""
+
 from telegram import Update
 from telegram.ext import ContextTypes
 from . import chat_with_AI, chat_with_celebrity
-from Handlers.Translator_handler import start_translator
-from Handlers.meal_counter import meal_counter_conversation
+from handlers.translator_handler import start_translator
+from handlers.meal_counter import meal_counter_conversation
 import logging
 
 logger = logging.getLogger(__name__)
 
 async def message_router(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    """
+        Маршрутизация входящих сообщений.
+        """
 
     message = update.message
 

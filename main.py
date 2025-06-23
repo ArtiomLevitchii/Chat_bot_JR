@@ -1,7 +1,9 @@
+"""Модуль запуска Telegram-бота и регистрации всех хендлеров."""
+
 import logging
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler,MessageHandler,filters
 from config import TELEGRAM_BOT_KEY
-from Handlers import basic, random_fact,chat_with_AI,chat_with_celebrity,message_router,Quiz_handler,meal_counter
+from handlers import basic, random_fact,chat_with_AI,chat_with_celebrity,message_router,quiz_handler,meal_counter
 
 
 #Adding basic configuration for log actions in console
@@ -11,6 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def main():
+    """Основная функция запуска Telegram-бота."""
     try:
         application = Application.builder().token(TELEGRAM_BOT_KEY).build()
 
@@ -19,13 +22,13 @@ def main():
         application.add_handler(CommandHandler("random", random_fact.random_fact))
         application.add_handler(CallbackQueryHandler(random_fact.random_fact_callback, pattern="random_"))
 
-        application.add_handler(CallbackQueryHandler(Quiz_handler.generate_theme_questions, pattern="quiz_theme_"))
-        application.add_handler(CallbackQueryHandler(Quiz_handler.generate_question_by_difficulty, pattern="difficulty_"))
-        application.add_handler(CallbackQueryHandler(Quiz_handler.verify_answer, pattern="question_answer_"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.generate_theme_questions, pattern="quiz_theme_"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.generate_question_by_difficulty, pattern="difficulty_"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.verify_answer, pattern="question_answer_"))
 
-        application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^continue_quiz$"))
-        application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^quiz_exit$"))
-        application.add_handler(CallbackQueryHandler(Quiz_handler.quiz_query_handler, pattern="^select_quiz_theme$"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.quiz_query_handler, pattern="^continue_quiz$"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.quiz_query_handler, pattern="^quiz_exit$"))
+        application.add_handler(CallbackQueryHandler(quiz_handler.quiz_query_handler, pattern="^select_quiz_theme$"))
 
         application.add_handler(CallbackQueryHandler(meal_counter.start_meal_counter, pattern="^meal_counter$"))
 

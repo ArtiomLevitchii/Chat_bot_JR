@@ -1,3 +1,5 @@
+"""Модуль для управления квизом"""
+
 import asyncio
 import logging
 from telegram import Update
@@ -11,6 +13,8 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 async def start_quiz_with_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Начинает общение с пользователем о квизе, происходит выбор тематики"""
+
     try:
         query = update.callback_query
         await query.answer()
@@ -37,6 +41,7 @@ async def start_quiz_with_user(update: Update, context: ContextTypes.DEFAULT_TYP
         await query.message.edit_text(get_user_error_message())
 
 async def generate_theme_questions(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Метод возвращает сгенерированные темы для квиза"""
 
     try:
         query = update.callback_query
@@ -61,6 +66,8 @@ async def generate_theme_questions(update: Update, context: ContextTypes.DEFAULT
         await query.message.edit_text(get_user_error_message())
 
 async def generate_question_by_difficulty(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Вовзращает сгенерированный вопрос в зависимости от выбранной сложности и темы"""
+
     try:
         query = update.callback_query
         await query.answer()
@@ -97,6 +104,7 @@ async def generate_question_by_difficulty(update: Update, context: ContextTypes.
 
 
 async def verify_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Проверяет ответ выбранный пользователем"""
     try:
         query = update.callback_query
         await query.answer()
@@ -133,6 +141,7 @@ async def verify_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.edit_text(get_user_error_message())
 
 async def quiz_query_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    """Маршрутизавтор для квиза"""
     try:
         query = update.callback_query
         await query.answer()
@@ -149,6 +158,7 @@ async def quiz_query_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
         await query.message.edit_text(get_user_error_message())
 
 async def quiz_exit(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    """Завершает квиз и выводит кол-во верных и ошибочных ответов"""
     try:
         query = update.callback_query
         await query.answer()
@@ -181,6 +191,7 @@ async def quiz_exit(update: Update, context:ContextTypes.DEFAULT_TYPE):
 
 
 async def choose_new_quiz_theme(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Метод для смены темы во время квиза, генегирует новые темы и возвращает их"""
     try:
         query = update.callback_query
         await query.answer()

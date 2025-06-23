@@ -1,3 +1,5 @@
+"""Модуль обработки сообщений пользователя в режиме общения с AI."""
+
 import logging
 
 import helpers.keyboards
@@ -10,6 +12,12 @@ from chat_history.chat_with_user import chat_with_user
 logger = logging.getLogger(__name__)
 
 async def response_to_user(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    """
+        Обрабатывает сообщение пользователя и отправляет ответ от AI.
+
+        Если режим общения не активен — предлагает вернуться в меню.
+        Сохраняет историю диалога и отправляет ответ от OpenAI.
+        """
 
     try:
         if not context.user_data.get("chat_mode"):
@@ -33,6 +41,10 @@ async def response_to_user(update: Update, context:ContextTypes.DEFAULT_TYPE):
         return "🛑🛑🛑 AI services are unavailable now, try again later 🛑🛑🛑"
 
 async def stop_chat_mode(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    """
+        Завершает режим общения с AI и возвращает главное меню.
+        """
+
     context.user_data["chat_mode"] = False
 
     reply_markup = get_main_menu_keyboard()
